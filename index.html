@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>金運タイプ診断｜お金との付き合い方の傾向</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf6ee;--card:#fffdf8;--ink:#2b2622;--sub:#6b6258;--line:#e5dcc8;--gold:#a8832a;--goldbg:#f4ead0;--accent:#7a2e2e;--btn:#2f4a3a;--btntx:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#161412;--card:#201d1a;--ink:#f1ebe0;--sub:#b5ab9b;--line:#3a342c;--gold:#d9b862;--goldbg:#2e2719;--accent:#e0a0a0;--btn:#d9b862;--btntx:#1a1612}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",sans-serif;font-size:18px;line-height:1.9}
+main{max-width:640px;margin:0 auto;padding:28px 18px 56px}
+h1,h2,h3,.serif{font-family:"Zen Old Mincho","Noto Serif JP",serif}
+h1{font-size:28px;line-height:1.5;margin:0 0 6px;text-align:center}
+.lead{text-align:center;color:var(--sub);font-size:16px;margin:0 0 6px}
+.rule{height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border:0;margin:18px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin:16px 0}
+label.q,.q{display:block;font-weight:700;margin:0 0 10px}
+.qn{color:var(--gold);font-family:"Zen Old Mincho",serif;margin-right:6px}
+.birth{display:flex;gap:8px;flex-wrap:wrap}
+select{font:inherit;padding:10px 8px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-height:48px;flex:1;min-width:88px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;text-align:left;padding:13px 14px;min-height:52px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);cursor:pointer;line-height:1.6}
+.opt[aria-pressed=true]{border-color:var(--gold);background:var(--goldbg);font-weight:700}
+.go{display:block;width:100%;font:inherit;font-weight:700;padding:15px;min-height:56px;border:0;border-radius:12px;background:var(--btn);color:var(--btntx);cursor:pointer;margin-top:8px}
+.go:disabled{opacity:.4;cursor:not-allowed}
+.note{font-size:14px;color:var(--sub);text-align:center;margin:10px 0}
+#result{display:none}
+.tname{font-size:34px;text-align:center;margin:4px 0;color:var(--gold)}
+.badge{text-align:center;font-size:14px;color:var(--sub);margin:0}
+.one{text-align:center;font-weight:500;margin:6px 0 14px}
+.num{background:var(--goldbg);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--sub);margin:12px 0}
+.sec h3{font-size:19px;margin:20px 0 4px;border-left:4px solid var(--gold);padding-left:10px}
+.sec p{margin:0}
+.locked{list-style:none;padding:0;margin:8px 0 0}
+.locked li{padding:11px 4px;border-bottom:1px dashed var(--line)}
+.locked li::before{content:"続き ";color:var(--gold);font-size:13px;margin-right:6px;border:1px solid var(--gold);border-radius:6px;padding:0 6px}
+.code{font-family:"Zen Old Mincho",serif;font-size:30px;text-align:center;letter-spacing:.08em;color:var(--accent);margin:6px 0}
+.line{display:block;text-align:center;text-decoration:none;font-weight:700;padding:15px;border-radius:12px;background:#06c755;color:#fff;margin-top:10px}
+.line small{display:block;font-weight:400;font-size:13px}
+.again{background:none;border:0;color:var(--sub);text-decoration:underline;font:inherit;font-size:15px;cursor:pointer;display:block;margin:14px auto 0}
+footer{font-size:13px;color:var(--sub);margin-top:28px;text-align:center}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style></head><body><main>
+<h1>金運タイプ診断</h1>
+<p class="lead">お金との付き合い方の傾向を知る、約10秒の診断です</p>
+<hr class="rule">
+<div id="form">
+ <div class="card"><span class="q"><span class="qn">一</span>生年月日</span>
+  <div class="birth" role="group" aria-label="生年月日">
+   <select id="y" aria-label="年"></select><select id="m" aria-label="月"></select><select id="d" aria-label="日"></select>
+  </div></div>
+ <div class="card" data-q="0"><span class="q"><span class="qn">二</span>まとまったお金が入ったとき、まず浮かぶのは？</span><div class="opts">
+  <button class="opt" data-v="0">先に、残す分を分けておきたい</button>
+  <button class="opt" data-v="1">使い道を決めて、動かしたい</button>
+  <button class="opt" data-v="2">そのときの気分で、どちらも</button></div></div>
+ <div class="card" data-q="1"><span class="q"><span class="qn">三</span>買い物や申し込みを決めるときは？</span><div class="opts">
+  <button class="opt" data-v="0">「ピンときた」感じを大切にする</button>
+  <button class="opt" data-v="1">比べて、メモして決める</button>
+  <button class="opt" data-v="2">ものによって、どちらも</button></div></div>
+ <div class="card" data-q="2"><span class="q"><span class="qn">四</span>お金のことで迷ったときは？</span><div class="opts">
+  <button class="opt" data-v="0">まず、ひとりで考える</button>
+  <button class="opt" data-v="1">身近な人に話してみる</button>
+  <button class="opt" data-v="2">そのときによって違う</button></div></div>
+ <button class="go" id="go" disabled>診断する</button>
+ <p class="note">登録不要。入力した内容は送信も保存もされません（この端末のブラウザ内で計算するだけです）。</p>
+</div>
+<div id="result" aria-live="polite">
+ <div class="card">
+  <p class="badge">あなたの金運タイプ</p>
+  <h2 class="tname" id="tname"></h2>
+  <p class="one" id="tone"></p>
+  <div class="num" id="tnum"></div>
+  <div class="sec" id="tbody"></div>
+ </div>
+ <div class="card">
+  <h3 class="serif" style="margin:0 0 4px;font-size:19px">この続きの5項目</h3>
+  <ul class="locked">
+   <li>お金が離れやすいクセ</li>
+   <li>相性のいい日の選び方</li>
+   <li>お財布・持ち物のヒント</li>
+   <li>ご縁の神様</li>
+   <li>来月の過ごし方</li>
+  </ul>
+  <hr class="rule">
+  <p style="margin:0;text-align:center">LINEで診断番号を送ると、続きが届きます</p>
+  <div class="code" id="tcode"></div>
+  <a class="line" href="#" aria-disabled="true" id="lineBtn">LINEで続きを受け取る<small>準備中です（公開までお待ちください）</small></a>
+  <p class="note">番号をメモして、LINEのトーク画面にそのまま送ってください。</p>
+ </div>
+ <button class="again" id="again">もう一度診断する</button>
+</div>
+<footer>楽しみながら自分の傾向を知るための読み物です。結果はお金の増減や将来を示すものではありません。<br>お金・健康・法律に関わる判断は、専門の窓口にご相談ください。</footer>
+</main>
+<script>
+const T=[{"k":1,"name":"ため池型","one":"気持ちが動いたものに、静かに備えを育てるタイプ","p":["お金とは、ひとりで静かに向き合うほうが落ち着きやすい方です。使うよりも、まず安心できる量をそっと残しておきたい気持ちが強く、その安心感が日々の土台になりやすい傾向があります。ただ、備えること自体が目的になると、楽しみが後回しになりがちです。","最近の流れは、数字だけでなく「どんな時に気持ちがゆるんだか」を振り返ると見えやすくなります。ほっとした買い物、後で惜しくなった出費を思い出すと、あなたなりの心地よい使い方が輪郭を持ちはじめます。ひらめきは、静かな時間にやってきやすいようです。","今日の小さな一歩は、財布やアプリを開いて「安心のために残す額」と「自分を喜ばせる額」を、紙に一行ずつ書くことです。金額は小さくてかまいません。決めたら、今日はそれ以上考えず、お茶でも飲んで気持ちを休ませてあげてください。"]},{"k":2,"name":"ご縁型","one":"人とのつながりを通して、お金との付き合い方を整えるタイプ","p":["お金のことを、人との関わりの中で感じ取りやすい方です。ご馳走し合う、お礼を贈る、ちょっとした相談に乗るなど、人とのやり取りがお金の感覚にも影響しやすい傾向があります。普段は貯める意識が強めで、必要な場面で気持ちよく出せる人です。","最近の流れは、誰と過ごした時間に満足したか、誰との出費が心地よかったかを思い出すと見えてきます。縁のある人から教わったこと、紹介されたものが、あなたの判断を助けてくれやすい時期です。ただし、頼まれると断れない場面には注意が必要です。","今日の小さな一歩は、最近お世話になった人を一人思い浮かべ、短いお礼のメッセージを送ることです。お金をかける必要はありません。感謝を言葉にすると、自分の中の「心地よい出し方」の基準が見えてきやすくなります。"]},{"k":3,"name":"積み木型","one":"小さな工夫を一段ずつ重ねて、安心を形にするタイプ","p":["お金と向き合うとき、見通しを立てて一段ずつ積み上げることに安心を感じやすい方です。家計簿やリスト、固定費の整理など、地道な作業を続けられる力があり、それが暮らしの安定感につながりやすい傾向があります。ひとりで黙々と整えるのも得意です。","最近の流れは、毎月の収支の「型」が自分に合っているかを点検すると見えやすくなります。続けにくい仕組みは、ゆるめたほうが長続きします。完璧を目指すより、気づいた日に直す柔らかさが、今のあなたを助けてくれそうです。","今日の小さな一歩は、引き落とし予定を一つだけ確認して、日付とおおよその金額をメモに書くことです。全部を整えようとせず、1件だけで十分です。気が向いたら、もう1件増やしてもかまいません。確認できた自分に「よくできました」と声をかけてあげましょう。"]},{"k":4,"name":"見守り型","one":"身近な人の暮らしを思いながら、堅実に整えるタイプ","p":["お金を、自分だけでなく家族や身近な人の暮らしとあわせて考える、やさしい視点を持つ方です。計画的に備えつつ、人の事情を汲んで動くため、周りから頼られやすい傾向があります。その分、自分のための使い方が後回しになることもあります。","最近の流れは、「誰のために」使ったお金と「自分のために」使ったお金の割合を眺めると見えてきます。どちらかに偏ると疲れやすいので、ほどよい配分を探す時期かもしれません。身近な人と話す時間が、判断を助けてくれやすいようです。","今日の小さな一歩は、自分のために使ってよいと思える小さな金額を決め、ひとつ選ぶことです。コーヒー1杯でも、好きな文具でもかまいません。自分を大切にする感覚を、暮らしの中で少しずつ取り戻してみましょう。"]},{"k":5,"name":"風読み型","one":"ひらめきを大切に、身軽に動いて感覚をつかむタイプ","p":["直感で「これだ」と感じたときに動く身軽さを持つ方です。お金も、ひとりで感じたまま気持ちよく使い、そこから学ぶ力があります。選択のスピードが速く、新しいことに出会いやすい一方で、勢いで決めた後に迷いが出やすい傾向もあります。","最近の流れは、ひらめきが「ほしい」なのか「気になる」なのかを分けてみると見えやすくなります。一度メモに書いて一晩置くと、本当に大切なものが残りやすいです。気持ちの風向きを観察する時期と捉えるとよいでしょう。","今日の小さな一歩は、気になっているものを一つ、スマホのメモに書いておくことです。すぐに買わず、3日後に見返して、まだ気になるかを確認します。ひらめきを大切にしながら、自分のペースを守る練習になります。"]},{"k":6,"name":"巡らせ型","one":"人と楽しさを分かち合い、お金を気持ちよく使うタイプ","p":["お金を「人と楽しさを分かち合うため」に使うのが得意な方です。一緒に食べる、贈る、応援するなど、気持ちのよい使い方が自然にできる、明るい巡りの感覚を持っています。その場の楽しさを優先しやすいぶん、振り返る時間が少なくなる傾向もあります。","最近の流れは、「楽しかった」と「疲れた」の両方を思い出して見ると整理しやすくなります。気持ちよく出せたお金と、つい勢いで出したお金の違いを知ると、あなたの心地よい巡らせ方が見えてきます。人との会話がヒントをくれやすいでしょう。","今日の小さな一歩は、最近の楽しかったお金の使い方を1つ思い出して、メモに書くことです。誰と、何に、どう感じたかを一行で十分です。それが、これからの心地よい使い方の目印になってくれます。見返す日を作っておくと、さらに役立ちます。"]},{"k":7,"name":"水路型","one":"流れを整えながら、無理なく使い道を巡らせるタイプ","p":["お金を「どこから入り、どこへ流れるか」という視点で捉える、整理上手な方です。計画を立てて、必要な場所へ無理なく流すことに心地よさを感じ、ひとりで静かに整えていく力があります。きちんと流れているときは、気持ちも安定しやすい傾向があります。","最近の流れは、使い道のなかで「詰まっている所」と「流れすぎている所」を探すと見えてきます。サブスクや固定費の見直しなど、小さな詰まりを直すだけで、気持ちが軽くなりやすい時期です。完璧にしなくても、問題ありません。","今日の小さな一歩は、使っていないサービスや定期購入がないかを1つだけ確認することです。使っていないものがあれば、解約の期限をメモしておきましょう。小さな整理が、これからの流れを軽やかにしてくれます。確認できたら、それだけで今日は十分です。"]},{"k":8,"name":"橋渡し型","one":"人と物事をつなぎ、段取りよく巡らせるタイプ","p":["人や物事の間に立って、うまく段取りをつけるのが得意な方です。お金についても、計画を立てて、必要な人や場面へ気持ちよく流せる、バランス感覚があります。周りからの信頼が厚く、頼まれごとが集まりやすい傾向もあります。","最近の流れは、「自分が調整役になっている場面」を振り返ると見えやすくなります。立て替えや段取りで、自分の時間やお金を多めに使っていないかを確かめてみてください。感謝される役割は、無理のない範囲だと長く続けやすいでしょう。","今日の小さな一歩は、立て替えや貸し借りがないかを思い出して、あれば一覧にメモすることです。あいまいなものは、早めにやさしく確認しておくと、お互いに気持ちよく過ごせます。小さな確認が、信頼を守ってくれます。"]}];
+const LP={"1":"はじまりの数。自分で決めて動く力が、お金の使い方にも表れやすい数です。","2":"調和の数。人の気持ちを受けとめる繊細さが、お金の感覚にも映りやすい数です。","3":"表現の数。楽しさや好奇心が、お金の使い方の入口になりやすい数です。","4":"土台の数。コツコツと確かめながら進める力が、暮らしを支えやすい数です。","5":"自由の数。変化や新しい体験に心が動きやすく、使い方も軽やかになりやすい数です。","6":"愛情の数。身近な人への思いやりが、お金の向け先にも表れやすい数です。","7":"探究の数。納得するまで考える静かな力が、判断を助けやすい数です。","8":"実行の数。現実的に形にする力が、お金との付き合い方にも出やすい数です。","9":"完結の数。手放し方や分かち合い方に、あなたらしさが表れやすい数です。"};
+const $=id=>document.getElementById(id);
+const ans=[null,null,null];
+(function(){const now=new Date().getFullYear();
+ $("y").innerHTML='<option value="">年</option>'+Array.from({length:now-1929},(_,i)=>now-i).map(v=>'<option>'+v+'</option>').join("");
+ $("m").innerHTML='<option value="">月</option>'+Array.from({length:12},(_,i)=>'<option>'+(i+1)+'</option>').join("");
+ $("d").innerHTML='<option value="">日</option>'+Array.from({length:31},(_,i)=>'<option>'+(i+1)+'</option>').join("");})();
+function ready(){$("go").disabled=!($("y").value&&$("m").value&&$("d").value&&ans.every(a=>a!==null));}
+["y","m","d"].forEach(i=>$(i).addEventListener("change",ready));
+document.querySelectorAll("[data-q]").forEach(c=>{const q=+c.dataset.q;
+ c.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{ans[q]=+b.dataset.v;
+  c.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x===b));ready();}));});
+const root=n=>{while(n>9)n=String(n).split("").reduce((a,c)=>a+ +c,0);return n;};
+const dsum=n=>String(n).split("").reduce((a,c)=>a+ +c,0);
+function calc(y,m,d,a){
+ const lp=root(dsum(y)+dsum(m)+dsum(d));
+ const full=dsum(y)+dsum(m)+dsum(d);
+ const t1=lp%2, t2=lp>=5?1:0, t3=root(dsum(d))%2;
+ const b1=a[0]===2?t1:a[0], b2=a[1]===2?t2:a[1], b3=a[2]===2?t3:a[2];
+ // b1=1:巡らせ b2=1:計画 b3=1:人と
+ const k=1+b1*4+b2*2+b3;
+ const nn=(full*7+a[0]*3+a[1]*5+a[2]*11)%90+10;
+ return {lp,k,code:"K"+k+"-"+nn};
+}
+$("go").addEventListener("click",()=>{
+ const y=+$("y").value,m=+$("m").value,d=+$("d").value;
+ const dt=new Date(y,m-1,d);
+ if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d){alert("存在しない日付です。日付をご確認ください。");return;}
+ const r=calc(y,m,d,ans),t=T[r.k-1];
+ $("tname").textContent=t.name;$("tone").textContent=t.one;
+ $("tnum").textContent="数秘の数「"+r.lp+"」："+LP[r.lp];
+ const hs=["お金との付き合い方の入口","最近の流れの見方","今日できる小さな一歩"];
+ $("tbody").innerHTML=t.p.map((p,i)=>"<h3>"+hs[i]+"</h3><p>"+p+"</p>").join("");
+ $("tcode").textContent="【"+r.code+"】";
+ $("form").style.display="none";$("result").style.display="block";window.scrollTo(0,0);
+});
+$("lineBtn").addEventListener("click",e=>e.preventDefault());
+$("again").addEventListener("click",()=>{$("result").style.display="none";$("form").style.display="block";window.scrollTo(0,0);});
+</script></body></html>
